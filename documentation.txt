@@ -1,9 +1,102 @@
+
+
+PART 1 — DOCKERIZE THE APPLICATION
+------------------------------------
+
+To dockerize the app, I used docker init which is a CLI line available within docker. 
+The Dockerfile contains INSTRUCTION args format such as FROM python for example
+which defines the base image to be used for the container. There are other
+forms of instructions such as ENV, RUN, COPY, EXPOSE, CMD, etc. We also specify the 
+port we want to allocate using EXPOSE in the form of instruct args [EXPOSE 5000]. 
+
+
+We also install the dependencies using the RUN instructions, which Installs
+all the dependencies required for the app to run within the docker container. Reason for that is to
+ensure that the app runs the same way regardless of the environment it is run in. Anyone with access to Docker
+and the container can run the app without having to install any dependencies on their local machine. 
+
+
+
+
+PART 2 — WRITE A BASIC TEST
+-----------------------------
+
+For the test file, I used pytest which is a testing framework for python. There are two tests in the test file.
+One that checks if the API responds with a 200 response code and the other that ensures if the JSON returned is the expected JSON.
+
 Pytest Fixtures: Fixtures are the functions that will be executed prior to each test method to which they are applied. 
-Therefore, we define fixtures rather than using the same code in every test. Fixtures are used to provide data to the tests such as database connections, URLs to test and some sort of input data.
+We define fixtures rather than using the same code in every test. Fixtures are used to provide data to the tests such as database connections, URLs to test and some sort of input data.
+
+On the test file we used something like @pytest.fixture to define the fixture which basically access the url available at port 5000 and returns the response. 
+
+If the response is 200, it passes the first test which checks the root endpoint.
+
+The second test case passes when the JSON object matches the expected JSON object.
+
+For both test cases we used assert
+
+
+
+
 
 
 PART 3 — SET UP GITHUB ACTIONS CI/CD PIPELINE
 -----------------------------------------------
+
+CI/CD pipeline which was created using a yaml file, ensures that there's two different jobs that runs when there's a push or pull request to the main branch.
+
+They both run on the ubuntu machine, however, if we were to run them on all other OS, that could also be accomplished using
+the matrix context. Like how we did for the python version. 
+
+The test job in our case runs the pytest on the different python versions, and if all of them pass, then the build job runs. 
+
+Without the test job passing, the build job won't run. The build job also runs on ubuntu, basically buulding the docker image
+using the docker cli available such as docker build -t <my-docker-app-name> . and docker images <my-docker-app-name> to verify
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This was done through docker init on the terminal of the root dir of the project. The CLI set up the project to 
+handle Docker and Docker Compose. 
+
 Create a workflow file at:
    .github/workflows/ci.yml
  
